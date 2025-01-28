@@ -31,8 +31,18 @@ class EventsGenerator(
             val predefinedValuesSet = mutableSetOf<String>()
 
             eventEntity.events.forEach { event ->
+                var eventNames = mutableListOf<String>()
+
                 val eventName = event.eventName
-                val eventClassName = getFormattedEventClassName(eventName)
+                var eventClassName = getFormattedEventClassName(eventName)
+                eventNames.add(eventClassName)
+
+                eventNames
+                    .count { it == eventClassName }
+                    .takeIf { it <= 1 }
+                    ?.let {
+                        eventClassName += "V$it"
+                    }
 
                 val parameters = event.parameters
                 val parametersNames = parameters.map { it.param }
