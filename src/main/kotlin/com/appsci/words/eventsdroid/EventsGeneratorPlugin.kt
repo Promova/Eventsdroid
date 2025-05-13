@@ -1,4 +1,4 @@
-package com.betterme.eventsdroid
+package com.appsci.words.eventsdroid
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

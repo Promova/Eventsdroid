@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
+    id 'org.jetbrains.kotlin.jvm' version '2.1.20'
     id 'java-gradle-plugin'
     id "com.gradle.plugin-publish" version '1.2.1'
     id("maven-publish")
@@ -13,8 +13,8 @@ dependencies {
     compileOnly gradleApi()
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22"
-    implementation "com.squareup:kotlinpoet:1.0.0-RC1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20"
+    implementation "com.squareup:kotlinpoet:2.1.0"
 
     // JSON Parsing
     implementation "com.google.code.gson:gson:2.8.2"
@@ -24,7 +24,7 @@ gradlePlugin {
     plugins {
         eventsGenerator {
             id = 'com.appsci.words.eventsdroid'
-            implementationClass = 'com.betterme.eventsdroid.EventsGeneratorPlugin'
+            implementationClass = 'com.appsci.words.eventsdroid.EventsGeneratorPlugin'
         }
     }
 }
@@ -33,7 +33,7 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 group = "com.appsci.words"
-version = "0.9.4"
+version = "1.0.0-alpha11"
 
 publishing {
     repositories {
@@ -46,6 +46,11 @@ publishing {
             }
         }
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 compileKotlin {

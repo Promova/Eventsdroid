@@ -1,4 +1,4 @@
-package com.betterme.eventsdroid
+package com.appsci.words.eventsdroid
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
@@ -39,7 +39,7 @@ class EventsGenerator(
             .map { it.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)".toRegex()) } // split by a cleaver regexp
             .filter {
                 // category and name are mandatory
-                !it.getOrNull(1).isNullOrBlank() && !it.getOrNull(2).isNullOrBlank()
+                !it.getOrNull(0).isNullOrBlank() && !it.getOrNull(2).isNullOrBlank()
             }
             .groupBy { it.first() }
             .map { eventGroup ->
@@ -51,12 +51,15 @@ class EventsGenerator(
 
                     val eventParams = events
                         .drop(4)
-                        .windowed(2) // take pairs of parameters
-                        .mapNotNull { (name, description) ->
+                        .chunked(2) // take pairs of parameters
+                        .mapNotNull { pair ->
+                            val name = pair[0]
+                            val description = pair.getOrNull(1)
+
                             val paramName = name.trim()
                             if (paramName.isNotBlank()) {
                                 val isNullable = paramName.last() == '?'
-                                val paramDescription = description.trim().takeIf { it.isNotBlank() }
+                                val paramDescription = description?.trim()?.takeIf { it.isNotBlank() }
 
                                 Parameter(
                                     name = paramName.trimEnd('?'),
@@ -87,6 +90,7 @@ class EventsGenerator(
         val eventGroups = parseCsvFile(schemaFile)
 
         eventGroups.forEach { eventGroup ->
+            var hasNullableParams = false
             val categoryName = eventGroup.name
             val formattedClassName = getFormattedEventSetClassName(categoryName)
 
@@ -96,8 +100,8 @@ class EventsGenerator(
             val eventNames = mutableListOf<String>()
             eventGroup.events.forEach { event ->
 
-                val eventName = event.customClassName ?: event.name
-                var eventClassName = getFormattedEventClassName(eventName)
+                val eventName = event.name
+                var eventClassName = getFormattedEventClassName(event.customClassName ?: event.name)
 
                 val duplicateCount = eventNames.count { it == eventClassName }
                 if (duplicateCount > 0) {
@@ -106,6 +110,7 @@ class EventsGenerator(
                 eventNames.add(eventClassName)
 
                 val parameters = event.parameters
+                hasNullableParams = hasNullableParams || parameters.any { it.nullable }
 
                 if (parameters.isEmpty()) {
                     // Otherwise, plain Event object with empty custom parameters map will be
@@ -132,11 +137,15 @@ class EventsGenerator(
                 }
             }
 
+            val generalPackageName = packageName
             val eventsFile = FileSpec
                 .builder(
                     packageName = "$packageName.${categoryName.lowercase()}",
                     fileName = "$className"
                 )
+                .apply {
+                    if (hasNullableParams) addImport(generalPackageName, "orNone")
+                }
                 .addType(rootObjectBuilder.build())
                 .build()
             eventsFile.writeTo(destFilePath)
@@ -181,7 +190,7 @@ class EventsGenerator(
         }
 
         val defaultValueFunction = FunSpec.builder("orNone")
-            .receiver(String::class.asTypeName().asNullable())
+            .receiver(String::class.asTypeName().copy(nullable = true))
             .addStatement("return this ?: \"none\"")
             .returns(String::class)
 
@@ -203,7 +212,7 @@ class EventsGenerator(
 
         return eventObjectBuilder
             .apply {
-                if (description != null) addKdoc("%L", description)
+                if (description != null) addKdoc("%L\n", description)
             }
             .superclass(ClassName(packageName, BASE_EVENT_CLASS_NAME))
             .addSuperclassConstructorParameter("%S", categoryName)
@@ -234,18 +243,13 @@ class EventsGenerator(
             val formattedParamName = getFormattedParameterName(field.name)
 
             // Add custom parameter to event constructor's signature.
-            customParamsConstructorBuilder.addParameter(formattedParamName, String::class)
+            val type = String::class.asTypeName().copy(nullable = field.nullable)
+            customParamsConstructorBuilder.addParameter(formattedParamName, type)
 
             // Provide specification for this custom parameter.
-            val type = if (field.nullable) {
-                String::class.asTypeName().asNullable()
-            } else {
-                String::class.asTypeName().asNonNullable()
-            }
-
             val eventParamSpec = PropertySpec.builder(formattedParamName, type)
                 .apply {
-                    if (field.description != null) addKdoc("%L", field.description)
+                    if (field.description != null) addKdoc("%L\n", field.description)
                 }
                 .initializer(formattedParamName)
                 .build()
@@ -266,7 +270,7 @@ class EventsGenerator(
 
         return eventDataClassBuilder
             .apply {
-                if (description != null) addKdoc("%L", description)
+                if (description != null) addKdoc("%L\n", description)
             }
             .addModifiers(KModifier.DATA)
             .primaryConstructor(customParamsConstructorBuilder.build())

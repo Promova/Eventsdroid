@@ -1,4 +1,4 @@
-package com.betterme.eventsdroid
+package com.appsci.words.eventsdroid
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
