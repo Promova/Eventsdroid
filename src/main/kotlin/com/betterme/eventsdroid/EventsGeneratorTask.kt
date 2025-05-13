@@ -1,6 +1,5 @@
 package com.betterme.eventsdroid
 
-import com.google.gson.Gson
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
@@ -19,8 +18,8 @@ open class EventsGeneratorTask : DefaultTask() {
 
     @TaskAction
     fun generateEvents() {
-        EventsGenerator(Gson(), destPath.get(), packageName.get()).also {
-            it.generateBaseEventClass()
+        EventsGenerator(destPath.get(), packageName.get()).also {
+            it.generateBaseEventFile()
             it.generateEventsClasses(eventsSchemaFile.get())
         }
     }
