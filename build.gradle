@@ -15,9 +15,6 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20"
     implementation "com.squareup:kotlinpoet:2.1.0"
-
-    // JSON Parsing
-    implementation "com.google.code.gson:gson:2.8.2"
 }
 
 gradlePlugin {

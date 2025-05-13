@@ -12,12 +12,7 @@
     <list default="true" id="5ce46f2e-6daf-40e0-a911-45097fbd3b9b" name="Default" comment="Allow nullable/empty screen_name values">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/betterme/eventsdroid/EventsGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/appsci/words/eventsdroid/EventsGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/betterme/eventsdroid/EventsGeneratorExtension.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/appsci/words/eventsdroid/EventsGeneratorExtension.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/betterme/eventsdroid/EventsGeneratorPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/appsci/words/eventsdroid/EventsGeneratorPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/betterme/eventsdroid/EventsGeneratorTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/appsci/words/eventsdroid/EventsGeneratorTask.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com.betterme.eventsdroid.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com.betterme.eventsdroid.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com.betterme.eventsdroid.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com.appsci.words.eventsdroid.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -800,6 +795,17 @@
       <window_info anchor="bottom" id="Find" order="5" />
       <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.24969475" />
     </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Allow nullable/empty screen_name values" />
